@@ -1,0 +1,13 @@
+[
+{"model":"auth.user",
+"pk": 1,
+"fields":{
+    "username": "ecommerce-admin",
+    "password": "pbkdf2_sha256$720000$Er6DoF3u1tisyI06FzeDj0$WPcemSOVcMUon7V8z1C4H+qkm2r3G4e0K+GLCQJua+w=",
+    "email": "ecommerce.admin@mail.com",
+    "is_superuser": true,
+    "is_staff":true,
+    "is_active":true
+}
+}
+]

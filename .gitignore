@@ -1,0 +1,4 @@
+env/
+chrome-linux64/
+.pytest_cache/
+.vscode/
