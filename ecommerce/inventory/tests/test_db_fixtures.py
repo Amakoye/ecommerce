@@ -74,8 +74,8 @@ def test_inventory_db_product_dbfixture(
 ):
     result = models.Product.objects.get(id=id)
 
-    result_created_at = result.created_at.strftime("%Y-%m-%d %H:%M:%s")
-    result_updated_at = result.updated_at.strftime("%Y-%m-%d %H:%M:%s")
+    result_created_at = result.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    result_updated_at = result.updated_at.strftime("%Y-%m-%d %H:%M:%S")
 
     assert result.web_id == web_id
     assert result.name == name
@@ -94,13 +94,23 @@ def test_inventory_db_product_uniqueness_integrity(db, product_factory):
 
 @pytest.mark.dbfixture
 def test_inventory_db_product_insert_data(db, product_factory, category_factory):
-    new_category = category_factory.create()
-    new_product = product_factory.create(
-        category=(
-            1,
-            36,
-        )
+    # Find the highest existing category ID and start from the next one
+    highest_existing_id = (
+        models.Category.objects.order_by("-id").first().id
+        if models.Category.objects.exists()
+        else 0
     )
+    starting_id = highest_existing_id + 1
+
+    categories = [
+        category_factory.create(id=i) for i in range(starting_id, starting_id + 5)
+    ]
+
+    # Create a new product and associate it with the five categories
+    new_product = product_factory.create()
+    for category in categories:
+        new_product.category.add(category)
+
     result_product_category = new_product.category.all().count()
     assert "web_id_" in new_product.web_id
-    assert result_product_category == 2
+    assert result_product_category == 5
