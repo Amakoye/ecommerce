@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "ecommerce.demo",
     # External applications
     "mptt",
+    "django_elasticsearch_dsl",
 ]
 
 MIDDLEWARE = [
@@ -135,3 +137,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+ELASTIC_USERNAME = os.getenv("ELASTIC_USERNAME")
+ELASTIC_PASSWORD = os.getenv("ELASTIC_PASSWORD")
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "localhost:9200",
+    },
+}
