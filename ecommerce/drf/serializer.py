@@ -3,7 +3,7 @@ from ecommerce.inventory.models import (
     Product,
     ProductInventory,
     Brand,
-    ProductAttributeValues,
+    Category,
     ProductAttributeValue,
     Media,
 )
@@ -33,6 +33,20 @@ class MediaSerializer(serializers.ModelSerializer):
         return self.context["request"].build_absolute_uri(obj.img_url.url)
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["name"]
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["name"]
+        read_only = True
+        editable = False
+
+
 class AllProducts(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -43,21 +57,24 @@ class AllProducts(serializers.ModelSerializer):
 
 
 class ProductInventorySerializer(serializers.ModelSerializer):
-    brand = BrandSerializer(many=False, read_only=True)
-    attributes = ProductAttributeValueSerializer(source="attribute_values", many=True)
-    image = MediaSerializer(source="media_product_inventory", many=True)
+    # brand = BrandSerializer(many=False, read_only=True)
+    # attributes = ProductAttributeValueSerializer(source="attribute_values", many=True)
+    # image = MediaSerializer(source="media_product_inventory", many=True)
+
+    product = ProductSerializer(many=False, read_only=True)
 
     class Meta:
         model = ProductInventory
         fields = [
+            "id",
             "sku",
-            "image",
             "store_price",
             "is_default",
+            # "image",
             "product",
-            "product_type",
-            "brand",
-            "attributes",
+            # "product_type",
+            # "brand",
+            # "attributes",
         ]
         readonly = True
         # depth = 2
